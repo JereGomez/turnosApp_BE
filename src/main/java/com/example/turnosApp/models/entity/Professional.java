@@ -11,7 +11,7 @@ public class Professional {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String name;
+    private String firstName;
     private String email;
     private String picture;
 
@@ -42,9 +42,9 @@ public class Professional {
     public Professional() {
     }
 
-    public Professional(Long id, String name, String email, String picture, Float averageRating, List<ServiceEntity> servicesOffer, List<Location> locations, List<Appointment> appointments) {
+    public Professional(Long id, String firstName, String email, String picture, Float averageRating, List<ServiceEntity> servicesOffer, List<Location> locations, List<Appointment> appointments) {
         this.id = id;
-        this.name = name;
+        this.firstName = firstName;
         this.email = email;
         this.picture = picture;
         this.averageRating = averageRating;
@@ -69,12 +69,12 @@ public class Professional {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
+    public String getFirstName() {
+        return firstName;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
     }
 
     public String getEmail() {

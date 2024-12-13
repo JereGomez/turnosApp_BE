@@ -15,10 +15,15 @@ public class AppointmetCreateDTO {
     @NotEmpty(message = "Description may not be empty")
     @NotBlank(message = "Description may not be blank")
     private String description;
-    @NotNull(message = "The Description of the appointment can not be null")
-    @NotEmpty(message = "userId may not be empty")
-    @NotBlank(message = "userId may not be blank")
-    private Long userId;
+    @NotNull(message = "The userEmail of the appointment can not be null")
+    @NotEmpty(message = "userEmail may not be empty")
+    @NotBlank(message = "userEmail may not be blank")
+    private String userEmail;
+
+    @NotNull(message = "The userName of the appointment can not be null")
+    @NotEmpty(message = "userName may not be empty")
+    @NotBlank(message = "userName may not be blank")
+    private String userName;
     @NotNull(message = "The locationId of the appointment can not be null")
     @NotEmpty(message = "locationId may not be empty")
     @NotBlank(message = "locationId may not be blank")
@@ -36,10 +41,11 @@ public class AppointmetCreateDTO {
     @NotBlank(message = "date may not be blank")
     private String date;
 
-    public AppointmetCreateDTO(String title, String description, Long userId, Long locationId, Long professionalId, Long serviceId, String date) {
+    public AppointmetCreateDTO(String title, String description, String userEmail, String userName, Long locationId, Long professionalId, Long serviceId, String date) {
         this.title = title;
         this.description = description;
-        this.userId = userId;
+        this.userEmail = userEmail;
+        this.userName = userName;
         this.locationId = locationId;
         this.professionalId = professionalId;
         this.serviceId = serviceId;
@@ -62,12 +68,20 @@ public class AppointmetCreateDTO {
         this.date = date;
     }
 
-    public Long getUserId() {
-        return userId;
+    public String getUserName() {
+        return userName;
     }
 
-    public void setUserId(Long userId) {
-        this.userId = userId;
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
+
+    public String getUserEmail() {
+        return userEmail;
+    }
+
+    public void setUserEmail(String userEmail) {
+        this.userEmail = userEmail;
     }
 
     public Long getLocationId() {

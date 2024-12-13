@@ -64,12 +64,12 @@ public class RatingService implements IRatingService {
     public RatingResponseDTO createRating(RatingCreateDTO ratingCreateDTO) {
         Rating ratingToSave = modelMapper.map(ratingCreateDTO, Rating.class);
         AppointmentResponseDTO appointmentOfRating = appointmentService.getAppointmentById(ratingCreateDTO.getAppointmentId());
-        UserResponseDTO user = userService.getUserById(appointmentOfRating.getUserId());
+        UserResponseDTO user = userService.getUserById(appointmentOfRating.getUser().getId());
         logger.info(user.toString());
         if(appointmentOfRating != null){
             ratingToSave.setProfessional(modelMapper.map(professionalService.getProfessionalById(appointmentOfRating.getProfessionalId()), Professional.class));
             ratingToSave.setService(modelMapper.map(serviceService.getServiceById(appointmentOfRating.getServiceEntityId()), ServiceEntity.class));
-            ratingToSave.setUser(modelMapper.map(userService.getUserById( appointmentOfRating.getUserId()), User.class));
+            ratingToSave.setUser(modelMapper.map(userService.getUserById( appointmentOfRating.getUser().getId()), User.class));
 //            ratingToSave.setAppointment(modelMapper.map(appointmentOfRating.getServiceEntityId(), Appointment.class));
             ratingToSave = ratingRepository.save(ratingToSave);
         }

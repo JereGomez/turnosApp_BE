@@ -9,6 +9,7 @@ import java.util.List;
 public interface IServiceService {
 
     List<ServiceResponseDTO> getAllServices();
+
     ServiceResponseDTO getServiceById (Long serviceId);
     ServiceResponseDTO createService(ServiceCreateDTO serviceCreateDTO);
     ServiceResponseDTO updateService(ServiceUpdateDTO serviceUpdateDTO);

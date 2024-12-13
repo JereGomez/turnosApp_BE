@@ -10,5 +10,5 @@ import java.util.Optional;
 @Repository
 public interface ProfessionalRepository extends JpaRepository<Professional, Long> {
 
-    Optional<Professional> findByName(String name);
+    Optional<Professional> findByFirstName(String firstName);
 }

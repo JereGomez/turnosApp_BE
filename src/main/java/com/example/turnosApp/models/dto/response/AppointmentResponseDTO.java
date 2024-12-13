@@ -10,18 +10,18 @@ public class AppointmentResponseDTO {
     private String description;
 
     private String date;
-    private Long userId; // Assuming UserResponseDTO exists
+    private UserResponseDTO user;
     private Long professionalId; // Assuming ProfessionalResponseDTO exists
     private Long serviceEntityId; // Assuming ServiceResponseDTO exists
     private Long locationId; // Assuming LocationResponseDTO exists
     private Long ratingId; // Assuming RatingResponseDTO exists
 
-    public AppointmentResponseDTO(Long id, String title, String description, String date, Long userId, Long professionalId, Long serviceEntityId, Long locationId, Long ratingId) {
+    public AppointmentResponseDTO(Long id, String title, String description, String date, UserResponseDTO user, Long professionalId, Long serviceEntityId, Long locationId, Long ratingId) {
         this.id = id;
         this.title = title;
         this.description = description;
         this.date = date;
-        this.userId = userId;
+        this.user = user;
         this.professionalId = professionalId;
         this.serviceEntityId = serviceEntityId;
         this.locationId = locationId;
@@ -60,12 +60,12 @@ public class AppointmentResponseDTO {
         this.date = date;
     }
 
-    public Long getUserId() {
-        return userId;
+    public UserResponseDTO getUser() {
+        return user;
     }
 
-    public void setUserId(Long userId) {
-        this.userId = userId;
+    public void setUser(UserResponseDTO user) {
+        this.user = user;
     }
 
     public Long getProfessionalId() {

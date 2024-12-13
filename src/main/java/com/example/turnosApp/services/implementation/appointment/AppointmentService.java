@@ -1,17 +1,16 @@
 package com.example.turnosApp.services.implementation.appointment;
 
 import com.example.turnosApp.models.dto.create.AppointmetCreateDTO;
-import com.example.turnosApp.models.dto.response.AppointmentResponseDTO;
-import com.example.turnosApp.models.dto.response.LocationResponseDTO;
-import com.example.turnosApp.models.dto.response.ProfessionalResponseDTO;
-import com.example.turnosApp.models.dto.response.ServiceResponseDTO;
+import com.example.turnosApp.models.dto.response.*;
 import com.example.turnosApp.models.dto.update.AppointmentUpdateDTO;
 import com.example.turnosApp.models.entity.Appointment;
+import com.example.turnosApp.models.entity.User;
 import com.example.turnosApp.repository.AppointmentReporitory;
 import com.example.turnosApp.services.interfaces.appointment.IAppointmentService;
 import com.example.turnosApp.services.interfaces.location.ILocationService;
 import com.example.turnosApp.services.interfaces.professional.IProfessionalService;
 import com.example.turnosApp.services.interfaces.service.IServiceService;
+import com.example.turnosApp.services.interfaces.user.IUserService;
 import com.example.turnosApp.utils.JsonPrinter;
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
@@ -30,17 +29,19 @@ public class AppointmentService implements IAppointmentService {
     private IProfessionalService professionalService;
     private IServiceService serviceService;
     private ILocationService locationService;
+    private IUserService    userService;
 
     private JsonPrinter jsonPrinter = new JsonPrinter();
 
     private Logger logger = LoggerFactory.getLogger(AppointmentService.class);
 
-    public AppointmentService(AppointmentReporitory appointmentRepository, ModelMapper modelMapper, IProfessionalService professionalService, IServiceService serviceService, ILocationService locationService){
+    public AppointmentService(AppointmentReporitory appointmentRepository, ModelMapper modelMapper, IProfessionalService professionalService, IServiceService serviceService, ILocationService locationService, IUserService userService){
         this.appointmentRepository = appointmentRepository;
         this.modelMapper =  modelMapper;
         this.professionalService = professionalService;
         this.serviceService = serviceService;
         this.locationService = locationService;
+        this.userService = userService;
         configureMapping();
     }
 
@@ -55,10 +56,10 @@ public class AppointmentService implements IAppointmentService {
 
     @Override
     public AppointmentResponseDTO createAppointment(AppointmetCreateDTO appointmetCreateDTO) {
-        //validate that service is available with date, professional, location.
-        ProfessionalResponseDTO professionalResponseDTO = professionalService.getProfessionalById(appointmetCreateDTO.getProfessionalId());
-        ServiceResponseDTO serviceResponseDTO = serviceService.getServiceById(appointmetCreateDTO.getServiceId());
-        LocationResponseDTO locationResponseDTO = locationService.getLocationById(appointmetCreateDTO.getLocationId());
+        //validate that service is available with date, professional, location
+//        ProfessionalResponseDTO professionalResponseDTO = professionalService.getProfessionalById(appointmetCreateDTO.getProfessionalId());
+//        ServiceResponseDTO serviceResponseDTO = serviceService.getServiceById(appointmetCreateDTO.getServiceId());
+//        LocationResponseDTO locationResponseDTO = locationService.getLocationById(appointmetCreateDTO.getLocationId());
         //Validate that Service is provided in that Location, that Professional works in that location and that Professional provides that Service.
         if(locationService.getServicesInLocation(appointmetCreateDTO.getLocationId()).contains(appointmetCreateDTO.getServiceId()) &&
                 locationService.getProfessionalsInLocation(appointmetCreateDTO.getProfessionalId()).contains(appointmetCreateDTO.getProfessionalId()) &&
@@ -68,10 +69,18 @@ public class AppointmentService implements IAppointmentService {
             validateDate(getAppointmentByProfessionalId(appointmetCreateDTO.getProfessionalId()),appointmetCreateDTO)){
                 //Validate that Service in that date is available and that Professional in that date is available. Validate that Location is available in that Date
                 logger.info("Appointment available to be created: " + jsonPrinter.toString(appointmetCreateDTO));
+                User user = userService.getUserByEmail(appointmetCreateDTO.getUserEmail(), appointmetCreateDTO.getUserName());
                 Appointment appointmentToSave = modelMapper.map(appointmetCreateDTO, Appointment.class);
-                appointmentRepository.save(appointmentToSave);
-                AppointmentResponseDTO appointmentResponseDTO = modelMapper.map(appointmentToSave, AppointmentResponseDTO.class);
-                return appointmentResponseDTO;
+                if(user != null){
+                    appointmentToSave.setUser(user);
+                    appointmentRepository.save(appointmentToSave);
+                    AppointmentResponseDTO appointmentResponseDTO = modelMapper.map(appointmentToSave, AppointmentResponseDTO.class);
+                    return appointmentResponseDTO;
+                }
+                else{ //Manage emails that dont correspond to any user
+                    return null;
+                }
+
             }
         }
 

@@ -72,7 +72,7 @@ public class ProfessionalService implements IProfessionalService {
 
     @Override
     public ProfessionalResponseDTO createProfessional(ProfessionalCreateDTO professionalCreateDTO) {
-        Professional professional = professionalRepository.findByFirstName(professionalCreateDTO.getFirstName()).orElse(null);
+        Professional professional = professionalRepository.findByName(professionalCreateDTO.getFirstName()).orElse(null);
         ProfessionalResponseDTO professionalResponseDTO = null;
         if(professional == null) {
             professional = modelMapper.map(professionalCreateDTO, Professional.class);
